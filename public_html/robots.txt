@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Apontar para o novo Sitemap
+Sitemap: https://otorrino-seabra.com/sitemap.xml
+
+# Bloquear pastas que não precisam de ser indexadas
+Disallow: /js/
+Disallow: /css/
+Disallow: /php/

@@ -1,0 +1,905 @@
+/* ==========================================================================
+   1. VARIÁVEIS E RESET
+   ========================================================================== */
+:root {
+    --primary-color: #007c89;    /* Verde Água Médico */
+    --primary-dark: #005f69;
+    --secondary-color: #2c3e50;  /* Azul Petróleo Profundo */
+    --accent-color: #88b7b3;     /* O tom original da clínica */
+    --text-color: #334155;
+    --text-light: #64748b;
+    --bg-light: #f8fafc;
+    --bg-dark: #0f172a;          /* Footer e tons escuros */
+    --white: #ffffff;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: var(--white);
+}
+
+a {
+    text-decoration: none;
+    color: var(--primary-color);
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: var(--primary-dark);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 20px;
+}
+
+.text-center { text-align: center; }
+.dark-section { background-color: var(--bg-light); }
+
+/* ==========================================================================
+   2. CABEÇALHO E NAVEGAÇÃO
+   ========================================================================== */
+.main-header {
+    background: transparent;
+    box-shadow: none;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    transition: all 0.4s ease;
+}
+
+.main-header.scrolled {
+    background: var(--primary-color);
+    box-shadow: 0 2px 14px rgba(0, 0, 0, 0.15);
+}
+
+.nav-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 20px;
+    transition: padding 0.4s ease;
+}
+
+.main-header.scrolled .nav-bar {
+    padding: 0.5rem 20px;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+}
+
+.nav-links a {
+    color: var(--white);
+    font-weight: 600;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3); /* Melhora a leitura no topo */
+    transition: all 0.3s ease;
+}
+
+/* Botão de Destaque no Menu */
+.nav-links .btn-highlight {
+    background-color: var(--secondary-color);
+    padding: 10px 20px;
+    border-radius: 50px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    text-shadow: none; /* Remove a sombra de texto do link normal */
+}
+
+.nav-links .btn-highlight:hover {
+    background-color: var(--white);
+    color: var(--secondary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+/* Ajuste do botão quando o menu faz scroll (fundo fica verde) */
+.main-header.scrolled .btn-highlight {
+    background-color: var(--white);
+    color: var(--primary-color);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.main-header.scrolled .btn-highlight:hover {
+    background-color: var(--secondary-color);
+    color: var(--white);
+}
+
+.main-header.scrolled .nav-links a {
+    text-shadow: none;
+}
+
+section {
+    scroll-margin-top: 96px;
+}
+
+.nav-links a:hover {
+    color: var(--accent-color);
+}
+
+/* ==========================================================================
+   3. SECÇÃO INTRO (HERO)
+   ========================================================================== */
+.hero {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../img/bg3.jpg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    padding-top: 0;
+    position: relative;
+}
+
+.scroll-down-arrow {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 50px;
+    border: 2px solid var(--white);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    transition: all 0.3s ease;
+    animation: bounce 2s infinite;
+}
+
+.scroll-down-arrow:hover {
+    background-color: var(--white);
+    color: var(--primary-color);
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateX(-50%) translateY(0);
+    }
+    40% {
+        transform: translateX(-50%) translateY(-10px);
+    }
+    60% {
+        transform: translateX(-50%) translateY(-5px);
+    }
+}
+
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: var(--white);
+}
+
+.hero p {
+    font-size: 1.2rem;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+    color: var(--white);
+}
+
+.btn {
+    background: var(--primary-color);
+    color: var(--white);
+    padding: 1rem 2.5rem;
+    border-radius: 50px; /* Botões arredondados são mais modernos */
+    font-weight: 700;
+    text-transform: uppercase;
+    box-shadow: 0 4px 15px rgba(0, 124, 137, 0.3);
+}
+
+.logo img {
+    display: block;
+}
+
+.btn:hover {
+    background: var(--primary-dark);
+    color: var(--white);
+}
+
+/* ==========================================================================
+   4. GRELHAS E CARTÕES (SOBRE, EQUIPA, ACORDOS)
+   ========================================================================== */
+.grid-2, .grid-3, .grid-4 {
+    display: grid;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.grid-2 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+.grid-3 { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+.grid-4 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+
+h2 { font-size: 2.5rem; margin-bottom: 0.5rem; color: var(--primary-color); }
+h3 { font-size: 1.2rem; color: var(--text-light); text-transform: uppercase; letter-spacing: 2px; }
+
+.card, .team-member {
+    background: var(--white);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease;
+}
+
+.card:hover, .team-member:hover { transform: translateY(-5px); }
+
+.team-member img {
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    margin-bottom: 1rem;
+}
+
+.logos-grid img {
+    max-width: 100%;
+    height: auto;
+    filter: grayscale(100%);
+    transition: filter 0.3s ease;
+}
+
+.logos-grid img:hover { filter: grayscale(0%); }
+
+/* ==========================================================================
+   5. SERVIÇOS & MODAL
+   ========================================================================== */
+.service-list { list-style: none; text-align: left; }
+.service-list li { margin-bottom: 1rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; }
+
+dialog {
+    margin: auto;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    max-width: 500px;
+    width: 90%;
+}
+
+dialog::backdrop { background: rgba(0, 0, 0, 0.6); }
+
+.modal-box { padding: 2rem; position: relative; }
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-light);
+}
+
+/* ==========================================================================
+   6. CONTACTOS E FOOTER
+   ========================================================================== */
+form { display: flex; flex-direction: column; gap: 1rem; text-align: left; }
+input[type="text"], input[type="email"], textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-family: inherit;
+}
+
+.contact-info { text-align: left; padding: 2rem; background: var(--bg-light); border-radius: 8px; }
+.contact-info h4 { margin-top: 1rem; color: var(--primary-color); }
+
+.main-footer {
+    background: var(--primary-dark);
+    color: #e0e0e0;
+    padding: 3rem 0 0 0;
+    font-size: 0.9rem;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    padding-bottom: 3rem;
+}
+
+.footer-col h4 {
+    color: var(--white);
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+    position: relative;
+    padding-bottom: 0.5rem;
+}
+
+.footer-col h4::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 40px;
+    height: 2px;
+    background: var(--primary-color);
+}
+
+.footer-col p {
+    margin-bottom: 0.8rem;
+    line-height: 1.6;
+}
+
+.footer-col ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-col ul li {
+    margin-bottom: 0.8rem;
+}
+
+.footer-col ul li a {
+    color: #e0e0e0;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-col ul li a:hover {
+    color: var(--primary-color);
+}
+
+.footer-bottom {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 1.5rem;
+    color: #aaa;
+    font-size: 0.85rem;
+}
+
+.footer-bottom p {
+    margin: 0;
+}
+
+/* ==========================================================================
+   7. RESPONSIVO (TELEMÓVEIS)
+   ========================================================================== */
+@media (max-width: 768px) {
+    .nav-bar { flex-direction: column; }
+    .nav-links { margin-top: 1rem; flex-wrap: wrap; justify-content: center; }
+    .hero h1 { font-size: 2rem; }
+    .hero { padding-top: 120px; }
+}
+/* ==========================================================================
+   8. EMAIL COPY STYLE
+   ========================================================================== */
+.email-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: var(--primary-color);
+    font-size: 1rem;
+    margin: 0.5rem 0;
+    position: relative;
+}
+
+#email-text {
+    font-weight: 500;
+    color: inherit; /* Garante que usa a cor definida no container */
+    text-decoration: none; /* Remove sublinhado se o browser adicionar link */
+}
+
+.copy-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-light);
+    transition: color 0.3s ease;
+    padding: 4px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.copy-btn:hover {
+    color: var(--primary-color);
+    background-color: rgba(0, 124, 137, 0.1);
+}
+
+.copy-btn.copied {
+    color: var(--primary-color);
+}
+
+.copy-tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--primary-color);
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeInOut 2s ease-in-out;
+    white-space: nowrap;
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translate(-50%, 10px); }
+    15% { opacity: 1; transform: translate(-50%, 0); }
+    85% { opacity: 1; transform: translate(-50%, 0); }
+    100% { opacity: 0; transform: translate(-50%, -10px); }
+}
+
+
+/* ==========================================================================
+   9. P�GINA DE ACORDOS (LAYOUT LISTA)
+   ========================================================================== */
+.acordos-header-bg {
+    background-color: #f0f4f8; /* Tom azulado muito claro */
+    padding: 2rem 0; /* Mais compacto */
+    margin-bottom: 1.5rem;
+}
+
+.acordos-header-bg h1 {
+    color: var(--secondary-color);
+    margin-bottom: 1rem;
+    font-weight: 400;
+    font-size: 1.6rem; /* Fonte ligeiramente reduzida */
+}
+
+.search-bar-wrapper {
+    max-width: 500px; /* Bem mais estreito */
+    margin: 0 auto;
+    display: flex;
+    background: var(--white);
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.search-input {
+    flex: 1;
+    border: none;
+    padding: 0.75rem 1rem; /* Mais compacto */
+    font-size: 0.95rem; /* Fonte ligeiramente menor */
+    outline: none;
+    font-family: inherit;
+    font-style: italic;
+    color: #666;
+}
+
+.search-btn {
+    background: var(--white);
+    border: none;
+    padding: 0 1.5rem;
+    cursor: pointer;
+    color: #666;
+    border-left: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.results-count {
+    margin-bottom: 1rem;
+    color: var(--text-light);
+    font-size: 0.95rem;
+}
+
+.acordos-grid-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 900px; /* Limit width for cleaner look */
+    margin: 0 auto 3rem;
+}
+
+.acordo-card {
+    display: grid;
+    grid-template-columns: 200px 1fr auto;
+    align-items: center;
+    background: var(--white);
+    border: 1px solid #eee;
+    padding: 1.5rem;
+    gap: 2rem;
+    border-radius: 4px;
+    transition: box-shadow 0.2s ease;
+}
+
+.acordo-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.acordo-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 80px;
+    /* Imagens contidas */
+}
+
+.acordo-logo img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.acordo-card[data-nome="medicare"] .acordo-logo img {
+    max-width: 70%;
+    height: auto;
+}
+
+.acordo-info h3 {
+    margin: 0;
+    color: var(--text-color); /* Darker text for title */
+    font-size: 1.2rem;
+    text-transform: none; /* Reset uppercase default from h3 */
+    letter-spacing: normal;
+    margin-bottom: 0.25rem;
+}
+
+.acordo-info p {
+    margin: 0;
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+.btn-outline {
+    display: inline-block;
+    background: transparent;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    padding: 0.5rem 1.2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    text-decoration: none; /* Garante que nao tem sublinhado se for link */
+    text-align: center;
+}
+
+.btn-outline:hover {
+    background: var(--primary-color);
+    color: var(--white);
+}
+
+/* Responsivo para Acordos */
+@media (max-width: 768px) {
+    .acordo-card {
+        grid-template-columns: 1fr; /* Stack vertically */
+        text-align: center;
+        gap: 1rem;
+    }
+    
+    .acordo-logo {
+        height: auto;
+        margin-bottom: 0.5rem;
+    }
+    
+    .acordo-logo img {
+        max-height: 100px;
+    }
+}
+
+
+/* ==========================================================================
+   10. P�GINA DE CONTACTOS
+   ========================================================================== */
+#contactos-page {
+    /* Ajuste para o header fixo/relativo conforme implementado */
+    padding-top: 0rem; 
+}
+
+.contactos-wrapper {
+    align-items: flex-start; /* Alinha o topo das colunas */
+}
+
+.contact-info-box {
+    padding: 2rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    height: 100%;
+}
+
+.contact-form-box {
+    padding: 2rem;
+    background: var(--white);
+    border: 1px solid #e9ecef; /* Borda suave */
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--secondary-color);
+}
+
+.form-group input, 
+.form-group select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 1rem;
+    color: var(--text-color);
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus, 
+.form-group select:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 124, 137, 0.1);
+}
+
+.form-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.form-row .form-group {
+    flex: 1;
+    margin-bottom: 0; /* Override default margin inside row */
+}
+
+.form-divider {
+    font-weight: bold;
+    color: var(--text-light);
+    font-size: 0.9rem;
+    padding: 0 0.5rem;
+    align-self: center;
+    margin-top: 1.5rem; /* Alinha visualmente com os inputs (compensando a label) */
+}
+
+.form-hint {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--text-light);
+    margin-top: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.captcha-container {
+    display: flex;
+    justify-content: flex-start; /* Alinhado � esquerda como num form normal */
+}
+
+.btn-full {
+    width: 100%;
+    margin-top: 1rem;
+}
+
+/* Ajuste Responsivo para o Form Row */
+@media (max-width: 600px) {
+    .form-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .form-divider {
+        margin: 1rem 0;
+        text-align: center;
+        margin-top: 0;
+    }
+}
+
+
+/* ==========================================================================
+   11. TABELA DE HOR�RIOS (CONTACTOS)
+   ========================================================================== */
+.schedule-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.schedule-table th, 
+.schedule-table td {
+    padding: 0.8rem;
+    border: 1px solid #dee2e6;
+    text-align: center;
+}
+
+.schedule-table th {
+    background-color: var(--primary-color); /* Mesma cor do Header */
+    color: var(--white);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+}
+
+.schedule-table tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.schedule-table tr:hover {
+    background-color: #e9ecef;
+}
+
+/* Coluna dos dias da semana */
+.schedule-table td:first-child {
+    background-color: var(--primary-color);
+    font-weight: 600;
+    color: var(--white);
+    text-align: left;
+    padding-left: 1rem;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.8rem;
+    flex-wrap: wrap;
+}
+
+.contact-item strong {
+    min-width: 80px;
+    color: var(--secondary-color);
+}
+
+.contact-value {
+    color: var(--text-color);
+    margin-right: 0.5rem;
+}
+
+/* Links na área de contacto */
+.contact-item a {
+    color: var(--primary-color);
+    text-decoration: underline;
+    transition: color 0.3s ease;
+    display: inline;  /* Better for text wrapping */
+}
+
+.contact-item a svg {
+    vertical-align: middle;
+    margin-left: 4px;
+    display: inline-block;
+}
+
+.contact-item a:hover {
+    color: var(--secondary-color);
+    text-decoration: none;
+}
+
+
+/* ==========================================================================
+   12. NOTCIAS (INDEX)
+   ========================================================================== */
+.news-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 2rem 0;
+}
+
+.news-card {
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+    text-align: left;
+}
+
+.news-card:hover {
+    transform: translateY(-5px);
+}
+
+.news-image {
+    height: 180px;
+    background-size: cover;
+    background-position: center;
+    background-color: #eee;
+}
+
+.news-content {
+    padding: 1.5rem;
+}
+
+.news-source {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: var(--primary-color);
+    font-weight: bold;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.news-card h4 {
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+    line-height: 1.4;
+}
+
+.news-card h4 a {
+    color: var(--secondary-color);
+    text-decoration: none;
+}
+
+.news-card h4 a:hover {
+    color: var(--primary-color);
+}
+
+.news-card p {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    margin-bottom: 1rem;
+}
+
+.news-date {
+    font-size: 0.8rem;
+    color: #999;
+}
+
+
+/* Ajuste de tamanho para o t?tulo Informacoes na pagina de contactos */
+.contact-info-box h4 {
+    font-size: 1.4rem; /* Um pouco maior que o padrao */
+    margin-bottom: 1.5rem;
+    color: var(--secondary-color);
+}
+
+
+/* ==========================================================================
+   13. CUSTOM LISTS (INDEX - SOBRE)
+   ========================================================================== */
+.custom-list {
+    list-style: none; /* Remove pontos padrao */
+    padding-left: 0;
+    margin-top: 1rem;
+    font-size: 0.95rem;
+    color: var(--text-color);
+}
+
+.custom-list li {
+    margin-bottom: 0.8rem;
+    position: relative;
+    padding-left: 1.5rem;
+    line-height: 1.4;
+}
+
+.custom-list li::before {
+    content: '\2022'; /* Bullet personalizavel se quiser */
+    color: var(--primary-color);
+    font-weight: bold;
+    font-size: 1.2rem;
+    position: absolute;
+    left: 0;
+    top: -2px;
+}
+
