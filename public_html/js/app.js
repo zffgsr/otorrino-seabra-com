@@ -38,14 +38,14 @@ if (modal && btnFechar) {
             if(servico) {
                 modalTitulo.textContent = servico.titulo;
                 modalConteudo.innerHTML = `<p>${servico.desc}</p>`;
-                modal.showModal(); // Abre o modal nativamente
+                modal.showModal();
             }
         });
     });
 
     btnFechar.addEventListener('click', () => modal.close());
     
-        // Fechar ao clicar fora
+    // Fechar ao clicar fora
     modal.addEventListener('click', (e) => {
         const rect = modal.getBoundingClientRect();
         const isInDialog = (rect.top <= e.clientY && e.clientY <= rect.top + rect.height
@@ -54,11 +54,12 @@ if (modal && btnFechar) {
             modal.close();
         }
     });
-
 }
 
 // Lógica do Formulário via Fetch API
-const form = document.getElementById('form-contacto');
+// NOTA: Este listener é um fallback. O formulário principal (form-marcacao)
+// tem o seu próprio listener inline em contactos.php com reCAPTCHA v3.
+const form = document.getElementById('form-marcacao');
 const respostaDiv = document.getElementById('form-resposta');
 
 if (form) {
@@ -88,12 +89,12 @@ if (form) {
             }
         } catch (error) {
             console.error('Erro:', error);
-            if(respostaDiv) respostaDiv.innerHTML = `<span style="color: red;">Erro ao contactar o servidor or erro de validação.</span>`;
+            if(respostaDiv) respostaDiv.innerHTML = `<span style="color: red;">Erro ao contactar o servidor.</span>`;
         }
     });
 }
+
 function copyToClipboard(text, btnElement) {
-    // Fallback simples para garantir funcionamento
     const textArea = document.createElement("textarea");
     textArea.value = text;
     textArea.style.position = "fixed";
@@ -116,16 +117,13 @@ function copyToClipboard(text, btnElement) {
 function showCopyFeedback(btnElement) {
     if (!btnElement) return;
     
-    // Armazena o ícone original se ainda não estiver guardado
     if (!btnElement.getAttribute('data-original-icon')) {
         btnElement.setAttribute('data-original-icon', btnElement.innerHTML);
     }
     
-    // Ícone de check simples
     btnElement.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/></svg>';
     btnElement.classList.add('copied');
     
-    // Feedback visual extra (tooltip simples)
     let tooltip = btnElement.parentElement.querySelector('.copy-tooltip');
     if (!tooltip) {
         tooltip = document.createElement('span');
@@ -135,7 +133,6 @@ function showCopyFeedback(btnElement) {
     }
     
     setTimeout(() => {
-        // Restaura o ícone original
         const original = btnElement.getAttribute('data-original-icon');
         if (original) btnElement.innerHTML = original;
         btnElement.classList.remove('copied');

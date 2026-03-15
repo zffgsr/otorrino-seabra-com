@@ -64,7 +64,7 @@ include 'php/header.php';
                 <h2>Profissionais Qualificados e Dedicados</h2>
                 <div class="grid-3">
                     <div class="team-member">
-                        <img src="img/equipa-js3.png" alt="Dr. José Seabra">
+                        <img src="img/equipa-js3.jpg" alt="Dr. José Seabra">
                         <h4>Dr. José Seabra da Rocha</h4>
                         <p>Médico Otorrinolaringologista<br><small>Cédula: 32455</small></p>
                     </div>
@@ -111,20 +111,13 @@ include 'php/header.php';
                 <h2>Notícias de Saúde</h2>
                 
                 <?php
-                // Configuração da API
                 $apiKey = NEWSAPI_KEY;  
-                // Pesquisa muito específica para garantir relevância (evita notícias de crime/desastres)
-                // Adicionado lifestyle.sapo.pt e healthline
                 $domains = 'publico.pt,sapo.pt,dn.pt,jn.pt,observador.pt,sicnoticias.pt,rtp.pt,tsf.pt,lifestyle.sapo.pt,healthline.com,medicalnewstoday.com';
-                // Keywords focadas em ORL mas EXCLUINDO greves e politica (-greve...)
                 $query = '(otorrino OR otorrinolaringologia OR audição OR surdez OR zumbido OR rinite OR sinusite OR "apneia do sono" OR "aparelho auditivo" OR "cordas vocais") -greve -sindicato -demissão -urgencias -fecho';
-                
                 $apiUrl = "https://newsapi.org/v2/everything?q=" . urlencode($query) . "&domains=" . $domains . "&language=pt&sortBy=publishedAt&pageSize=15&apiKey=" . $apiKey;
 
-                // Tenta obter os dados (Requer allow_url_fopen=On no php.ini ou usar cURL)
                 $newsData = null;
                 
-                // Método 1: cURL (Mais robusto e comum em servidores)
                 if (function_exists('curl_init')) {
                     $ch = curl_init();
                     curl_setopt($ch, CURLOPT_URL, $apiUrl);
@@ -132,61 +125,35 @@ include 'php/header.php';
                     curl_setopt($ch, CURLOPT_USERAGENT, 'OtorrinoSeabraWebsite/1.0');
                     curl_setopt($ch, CURLOPT_TIMEOUT, 6);
                     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-                    
-                    // Em produção isto deve estar a true.
                     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true); 
-                    
                     $response = curl_exec($ch);
                     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-                    
-                    if (curl_errno($ch)) {
-                        // error handling can be logged, but no HTML comment
-                    }
-                    
                     curl_close($ch);
-
                     if ($response && $httpCode === 200) {
                         $newsData = json_decode($response, true);
-                    } else {
-                        // debug logic removed
                     }
-                }
-                // Método 2: Fallback para file_get_contents
-                elseif (ini_get('allow_url_fopen')) {
-                    $context = stream_context_create([
-                        'http' => [
-                            'header' => "User-Agent: OtorrinoSeabraWebsite/1.0\r\n"
-                        ]
-                    ]);
+                } elseif (ini_get('allow_url_fopen')) {
+                    $context = stream_context_create(['http' => ['header' => "User-Agent: OtorrinoSeabraWebsite/1.0\r\n"]]);
                     $response = @file_get_contents($apiUrl, false, $context);
                     if ($response) {
                         $newsData = json_decode($response, true);
                     }
                 }
                 
-                // Fallback de demonstração se a API falhar ou não devolver artigos
-                // Agora também verificamos se, após filtrar, sobrou algum artigo
                 $validArticles = [];
                 if ($newsData && isset($newsData['status']) && $newsData['status'] === 'ok' && !empty($newsData['articles'])) {
                     $tempArticles = [];
                     $seenTitles = [];
 
-                    // 1. Filtragem Inicial
                     foreach ($newsData['articles'] as $art) {
-                        // Ignorar removidos
                         if ($art['title'] === '[Removed]' || $art['source']['name'] === '[Removed]') continue;
-                        // Imagem obrigatória
                         if (empty($art['urlToImage'])) continue;
-
-                        // Dedup
                         $titleKey = strtolower(substr($art['title'], 0, 25)); 
                         if (in_array($titleKey, $seenTitles)) continue;
                         $seenTitles[] = $titleKey;
-
                         $tempArticles[] = $art;
                     }
 
-                    // 2. Seleção Round-Robin por Fonte
                     $articlesBySource = [];
                     foreach ($tempArticles as $art) {
                         $src = $art['source']['name'];
@@ -210,12 +177,11 @@ include 'php/header.php';
                 }
                 
                 if (empty($validArticles)) {
-                    // Dados simulados para não quebrar o layout (Conteúdo Evergreen)
                     $articles = [
                         [
                             'title' => 'Novos avanços no tratamento da surdez súbita',
                             'description' => 'Estudos recentes apontam para novas terapias combinadas que aumentam a taxa de recuperação em pacientes com perda auditiva repentina.',
-                            'url' => '#', // Link interno ou âncora se não houver externo confiável
+                            'url' => '#',
                             'urlToImage' => 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=500&q=80',
                             'source' => ['name' => 'Artigo Clínico'],
                             'publishedAt' => date('Y-m-d')
@@ -237,7 +203,6 @@ include 'php/header.php';
                             'publishedAt' => date('Y-m-d', strtotime('-12 days'))
                         ]
                     ];
-                    
                 } else {
                     $articles = $validArticles;
                 }

@@ -8,7 +8,6 @@ require_once 'config.php';
 // Limpar qualquer output anterior (espaços em branco, warnings, etc)
 if (ob_get_length()) ob_clean();
 
-// Define que a resposta será em formato JSON moderno
 header('Content-Type: application/json');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -35,9 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if (!empty($telemovel)) {
-        // Remove espaços e traços
         $telemovel_clean = preg_replace('/[^0-9]/', '', $telemovel);
-        // Validação (9 dígitos deve começar por 9, 2 ou 3 - Portugal)
         if (!preg_match('/^[239][0-9]{8}$/', $telemovel_clean)) {
              http_response_code(400);
              echo json_encode(["sucesso" => false, "mensagem" => "O número de telemóvel/telefone não é válido (deve ter 9 dígitos)."]);
@@ -45,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    // 3. Validação do ReCaptcha (Server-side)
+    // 3. Validação do reCAPTCHA v3 (Server-side)
     $recaptcha_url = 'https://www.google.com/recaptcha/api/siteverify';
     $recaptcha_data = [
         'secret' => RECAPTCHA_SECRET_KEY,
@@ -55,7 +52,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $verify_response = false;
     $metodo_usado = '';
 
-    // Método 1: Tentar com cURL - Muito mais provável de funcionar em cPanel (ex: PTISP)
     if (function_exists('curl_init')) {
         $metodo_usado = 'cURL';
         $ch = curl_init();
@@ -66,11 +62,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         curl_setopt($ch, CURLOPT_TIMEOUT, 10);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
         $verify_response = curl_exec($ch);
-        
         $curl_error = curl_error($ch);
         curl_close($ch);
     } 
-    // Método 2: Fallback (pode falhar se allow_url_fopen estiver desligado)
     if (!$verify_response && ini_get('allow_url_fopen')) {
         $metodo_usado .= ($metodo_usado ? ' + ' : '') . 'file_get_contents';
         $options = [
@@ -86,7 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($verify_response === false) {
         http_response_code(400);
-        $detalhes_erro = isset($curl_error) && !empty($curl_error) ? " Erro C: " . $curl_error : " (O servidor não consegue comunicar com a Google. contacte o suporte/PTISP)";
+        $detalhes_erro = isset($curl_error) && !empty($curl_error) ? " Erro C: " . $curl_error : " (O servidor não consegue comunicar com a Google. Contacte o suporte/PTISP)";
         echo json_encode(["sucesso" => false, "mensagem" => "Falha na validação de segurança." . $detalhes_erro]); 
         exit;
     }
@@ -143,37 +137,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $para = EMAIL_TO;
     $assunto = EMAIL_SUBJECT_PREFIX . "Agendamento: $nome - $nome_servico";
     
-    // Corpo do email seguro e melhor formatado
     $corpo = "==================================================\n";
     $corpo .= "   NOVO PEDIDO DE AGENDAMENTO VIA WEBSITE\n";
     $corpo .= "==================================================\n\n";
-    
     $corpo .= "DADOS DO UTENTE:\n";
     $corpo .= "Nome:       " . $nome . "\n";
     $corpo .= "Telemóvel:  " . $telemovel . "\n\n";
-    
     $corpo .= "--------------------------------------------------\n";
     $corpo .= "SERVIÇO SOLICITADO:\n";
     $corpo .= "Tipo:       " . $nome_servico . "\n";
-    $corpo .= "Horário de preferência:    " . ucfirst($horario) . "\n";    if (!empty($observacoes)) {
+    $corpo .= "Horário de preferência:    " . ucfirst($horario) . "\n";
+    if (!empty($observacoes)) {
         $corpo .= "\nOBSERVAÇÕES:\n" . $observacoes . "\n";
-    }    $corpo .= "--------------------------------------------------\n\n";
+    }
+    $corpo .= "--------------------------------------------------\n\n";
     
-    // IP do cliente para segurança/registo
     $ip_cliente = $_SERVER['REMOTE_ADDR'] ?? 'Desconhecido';
-
     $corpo .= "Data do pedido: " . date('d/m/Y') . " às " . date('H:i') . "\n";
     $corpo .= "IP de Origem:   " . $ip_cliente . "\n";
     $corpo .= "Privacidade:    Aceitou processamento de dados para agendamento.\n"; 
     $corpo .= "Sistema:        Formulário Web (otorrino-seabra.com)\n";
     
-    // Em PTISP e cPanel com políticas agressivas, é obrigatório definir o -f (force from)
     $headers = "From: Formulario <" . EMAIL_FROM . ">\r\n" .
                "Reply-To: " . EMAIL_FROM . "\r\n" .
                "Content-Type: text/plain; charset=UTF-8\r\n" .
                "X-Mailer: PHP/" . phpversion();
 
-    // O parâmetro extra '-f' força o Sendmail/Exim a reconhecer o remetente oficial
     $envio = @mail($para, $assunto, $corpo, $headers, "-f" . EMAIL_FROM);
     $mensagem_sucesso = "Obrigado! O seu pedido foi recebido. Entraremos em contacto brevemente.";
 
