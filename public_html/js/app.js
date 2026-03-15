@@ -59,7 +59,7 @@ if (modal && btnFechar) {
 // Lógica do Formulário via Fetch API
 // NOTA: Este listener é um fallback. O formulário principal (form-marcacao)
 // tem o seu próprio listener inline em contactos.php com reCAPTCHA v3.
-const form = document.getElementById('form-marcacao');
+const form = document.getElementById('form-contacto');
 const respostaDiv = document.getElementById('form-resposta');
 
 if (form) {
