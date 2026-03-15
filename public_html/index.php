@@ -64,7 +64,7 @@ include 'php/header.php';
                 <h2>Profissionais Qualificados e Dedicados</h2>
                 <div class="grid-3">
                     <div class="team-member">
-                        <img src="img/equipa-js3.jpg" alt="Dr. José Seabra">
+                        <img src="img/equipa-js3.png" alt="Dr. José Seabra">
                         <h4>Dr. José Seabra da Rocha</h4>
                         <p>Médico Otorrinolaringologista<br><small>Cédula: 32455</small></p>
                     </div>

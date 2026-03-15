@@ -6,8 +6,8 @@
                 <h4>Clínica Dr. José Seabra da Rocha</h4>
                 <p>Especialistas em Otorrinolaringologia. Focados na prevenção, diagnóstico e tratamento de doenças do ouvido, nariz, garganta e pescoço.</p>
                 <div style="margin-top: 1.5rem;">
-                    <a href="https://www.livroreclamacoes.pt" target="_blank" rel="noopener noreferrer" title="Livro de Reclamações Eletrónico" style="display: inline-block; background: white; color: #b22222; font-weight: 700; font-size: 0.85rem; padding: 8px 12px; border-radius: 4px; text-decoration: none; border: 1px solid #ddd;">
-                        📋 Livro de Reclamações
+                    <a href="https://www.livroreclamacoes.pt" target="_blank" title="Livro de Reclamações Eletrónico">
+                        <img src="img/livro-rec.png" alt="Livro de Reclamações" style="max-width: 140px; height: auto; background: white; padding: 5px; border-radius: 4px;">
                     </a>
                 </div>
             </div>
