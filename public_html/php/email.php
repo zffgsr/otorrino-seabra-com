@@ -109,11 +109,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
     
-    // Verificação de Score para v3 (0 a 1.0)
-    // Valores baixos (ex: 0.1 a 0.3) indicam grande probabilidade de bot
+    // Verificação de Score para reCAPTCHA v3 (0.0 a 1.0)
+    // Score < 0.5 indica provável bot. Não expor o score ao utilizador.
     if (isset($response_keys->score) && $response_keys->score < 0.5) {
         http_response_code(400);
-        echo json_encode(["sucesso" => false, "mensagem" => "A nossa segurança bloqueou a sua submissão (Score: " . $response_keys->score . "). Se for humano, contacte-nos por telefone."]); 
+        echo json_encode(["sucesso" => false, "mensagem" => "A nossa segurança bloqueou a sua submissão. Se for humano, contacte-nos por telefone."]);
         exit;
     }
 
